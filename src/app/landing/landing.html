@@ -1,0 +1,70 @@
+<header>
+  <h1>Currency Exchanger</h1>
+</header>
+
+<main>
+  <form [formGroup]="formGroup">
+    <section>
+      <h3>FROM</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>From currency</mat-label>
+        <mat-select formControlName="fromCurrency" name="from">
+          @for (currency of currenciesList(); track currency.id) {
+            <mat-option [value]="currency.short_code">{{ currency.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          placeholder="Enter amount"
+          formControlName="fromAmount"
+        />
+      </mat-form-field>
+    </section>
+
+    <button
+      matFab
+      matSize
+      class="convert"
+      extended
+      type="submit"
+      (click)="convert()"
+      [disabled]="loading()"
+    >
+      <mat-icon>transform</mat-icon>
+      Convert
+    </button>
+
+    <section>
+      <h3>TO</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>To currency</mat-label>
+        <mat-select formControlName="toCurrency" name="to">
+          @for (currency of currenciesList(); track currency.id) {
+            <mat-option [value]="currency.short_code">{{ currency.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          type="number"
+          min="0"
+          placeholder="To currency"
+          formControlName="toAmount"
+          readonly
+        />
+      </mat-form-field>
+    </section>
+  </form>
+</main>
+
+<footer>
+  <h5>Hope you find this page helpful!</h5>
+</footer>
