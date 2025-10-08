@@ -1,0 +1,6 @@
+<h2>History of conversation:</h2>
+<ul>
+  @for (item of list(); track item) {
+    <li>{{ item.fromCurrency }} {{ item.from }} - {{ item.toCurrency }} {{ item.to }}</li>
+  }
+</ul>
