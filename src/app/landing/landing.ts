@@ -8,6 +8,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LastConversions } from '../last-conversions/last-conversions';
+import { LastConversionsService } from '../last-conversions/last-conversions.service';
 
 @Component({
   selector: 'app-landing',
@@ -18,6 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    LastConversions,
   ],
   templateUrl: './landing.html',
   styleUrl: './landing.scss',
@@ -36,6 +39,7 @@ export class Landing implements OnInit {
 
   private currencyService = inject(CurrencyService);
   private snackBar = inject(MatSnackBar);
+  private lastConversionsService = inject(LastConversionsService);
 
   ngOnInit() {
     this.getListOfCurrencies();
@@ -70,10 +74,17 @@ export class Landing implements OnInit {
         .convertCurrency(form.fromCurrency!, form.toCurrency!, form.fromAmount)
         .subscribe({
           next: (data: ConvertResponse) => {
+            console.log(data);
             this.loading.set(false);
             this.formGroup.controls['toAmount'].setValue(
               (Math.round(data.value * 100) / 100).toString(),
             );
+            this.lastConversionsService.add({
+              toCurrency: data.to,
+              fromCurrency: data.from,
+              from: form.fromAmount as string,
+              to: data.value.toString(),
+            });
           },
           error: () => {
             this.loading.set(false);
